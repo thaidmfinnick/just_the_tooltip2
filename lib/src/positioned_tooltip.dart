@@ -32,6 +32,7 @@ class PositionedTooltip2 extends SingleChildRenderObjectWidget {
     required this.shadow,
     required this.elevation,
     required this.scrollPosition,
+    required this.preferredDirectionWhenHalfScreen,
   }) : super(key: key, child: child);
 
   final EdgeInsetsGeometry margin;
@@ -66,6 +67,8 @@ class PositionedTooltip2 extends SingleChildRenderObjectWidget {
 
   final ScrollPosition? scrollPosition;
 
+  final bool preferredDirectionWhenHalfScreen;
+
   @override
   RenderObject createRenderObject(BuildContext context) {
     return RenderPositionedTooltip(
@@ -83,6 +86,7 @@ class PositionedTooltip2 extends SingleChildRenderObjectWidget {
       shadow: shadow,
       elevation: elevation,
       scrollPosition: scrollPosition,
+      preferredDirectionWhenHalfScreen: preferredDirectionWhenHalfScreen,
     );
   }
 
@@ -105,7 +109,8 @@ class PositionedTooltip2 extends SingleChildRenderObjectWidget {
       ..targetSize = targetSize
       ..shadow = shadow
       ..elevation = elevation
-      ..scrollPosition = scrollPosition;
+      ..scrollPosition = scrollPosition
+      ..preferredDirectionWhenHalfScreen = preferredDirectionWhenHalfScreen;
   }
 
   @override
@@ -166,6 +171,7 @@ class RenderPositionedTooltip extends RenderShiftedBox
     required Shadow shadow,
     required double elevation,
     required ScrollPosition? scrollPosition,
+    required bool preferredDirectionWhenHalfScreen,
   })  : _margin = margin,
         _offset = offset,
         _target = target,
@@ -180,9 +186,17 @@ class RenderPositionedTooltip extends RenderShiftedBox
         _shadow = shadow,
         _elevation = elevation,
         _scrollPosition = scrollPosition,
+        _preferredDirectionWhenHalfScreen = preferredDirectionWhenHalfScreen,
         super(child);
 
   late AxisDirection axisDirection;
+  bool get preferredDirectionWhenHalfScreen => _preferredDirectionWhenHalfScreen;
+  bool _preferredDirectionWhenHalfScreen;
+  set preferredDirectionWhenHalfScreen(bool value) {
+    if (_preferredDirectionWhenHalfScreen == value) return;
+    _preferredDirectionWhenHalfScreen = value;
+    markNeedsLayout();
+  }
 
   EdgeInsetsGeometry get margin => _margin;
   EdgeInsetsGeometry _margin;
@@ -321,6 +335,7 @@ class RenderPositionedTooltip extends RenderShiftedBox
       size: constraints.biggest,
       childSize: childSize,
       scrollPosition: scrollPosition,
+      preferredDirectionWhenHalfScreen: preferredDirectionWhenHalfScreen,
     );
     final quadrantConstraints = _getQuadrantConstraints(
       constraints,
@@ -361,6 +376,7 @@ class RenderPositionedTooltip extends RenderShiftedBox
       size: constraints.biggest,
       childSize: childSize,
       scrollPosition: scrollPosition,
+      preferredDirectionWhenHalfScreen: preferredDirectionWhenHalfScreen,
     );
     final childParentData = maybeChild.parentData as BoxParentData;
     var quadrantConstraints = _getQuadrantConstraints(

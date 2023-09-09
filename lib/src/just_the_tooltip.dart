@@ -4,9 +4,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:just_the_tooltip2/just_the_tooltip.dart';
-import 'package:just_the_tooltip2/src/models/just_the_interface.dart';
 import 'package:just_the_tooltip2/src/models/target_information.dart';
 import 'package:just_the_tooltip2/src/positioned_tooltip.dart';
+
+part 'just_the_tooltip_entry.dart';
 
 typedef ShowTooltip = Future<void> Function({
   bool immediately,
@@ -57,6 +58,7 @@ class JustTheTooltip2 extends StatefulWidget implements JustTheInterface2 {
     this.shadow,
     this.showWhenUnlinked = false,
     this.scrollController,
+    this.preferredDirectionWhenHalfScreen = false,
   }) : super(key: key);
 
   @override
@@ -156,6 +158,9 @@ class JustTheTooltip2 extends StatefulWidget implements JustTheInterface2 {
 
   @override
   final ScrollController? scrollController;
+
+  @override
+  final bool preferredDirectionWhenHalfScreen;
 
   @override
   JustTheTooltip2State<OverlayEntry> createState() =>
@@ -686,77 +691,83 @@ abstract class JustTheTooltip2State<T> extends State<JustTheInterface2>
       showWhenUnlinked: widget.showWhenUnlinked,
       offset: targetInformation.offsetToTarget,
       link: _layerLink,
-      child: FadeTransition(
-        opacity: CurvedAnimation(
-          parent: _animationController,
-          curve: widget.curve,
-          reverseCurve: widget.reverseCurve,
-        ),
-        child: Directionality(
-          textDirection: widget.textDirection,
-          child: Builder(
-            builder: (context) {
-              final scrollController = widget.scrollController;
-              final wrappedChild = Material(
-                type: MaterialType.transparency,
-                child: widget.content,
-              );
+      child: Directionality(
+        textDirection: widget.textDirection,
+        child: Builder(
+          builder: (context) {
+            final scrollController = widget.scrollController;
+            final wrappedChild = Material(
+              type: MaterialType.transparency,
+              child: widget.content,
+            );
 
-              if (scrollController != null) {
-                return AnimatedBuilder(
-                  animation: scrollController,
-                  child: wrappedChild,
-                  builder: (context, child) {
-                    return PositionedTooltip2(
-                      // curve: _defaultAnimateCurve,
-                      // duration: _defaultAnimateDuration,
-                      animatedTransitionBuilder:
-                          widget.animatedTransitionBuilder,
-                      margin: widget.margin,
-                      targetSize: targetInformation.size,
-                      target: targetInformation.target,
-                      offset: widget.offset,
-                      preferredDirection: widget.preferredDirection,
-                      offsetToTarget: targetInformation.offsetToTarget,
-                      borderRadius: widget.borderRadius,
-                      tailBaseWidth: widget.tailBaseWidth,
-                      tailLength: widget.tailLength,
-                      tailBuilder: widget.tailBuilder,
-                      backgroundColor:
-                          widget.backgroundColor ?? theme.cardColor,
-                      textDirection: widget.textDirection,
-                      shadow: widget.shadow ?? defaultShadow,
-                      elevation: widget.elevation,
-                      scrollPosition: scrollController.position,
-                      child: child!,
-                    );
-                  },
-                );
-              }
-
-              return PositionedTooltip2(
-                // curve: _defaultAnimateCurve,
-                // duration: _defaultAnimateDuration,
-                animatedTransitionBuilder: widget.animatedTransitionBuilder,
-                margin: widget.margin,
-                targetSize: targetInformation.size,
-                target: targetInformation.target,
-                offset: widget.offset,
-                preferredDirection: widget.preferredDirection,
-                offsetToTarget: targetInformation.offsetToTarget,
-                borderRadius: widget.borderRadius,
-                tailBaseWidth: widget.tailBaseWidth,
-                tailLength: widget.tailLength,
-                tailBuilder: widget.tailBuilder,
-                backgroundColor: widget.backgroundColor ?? theme.cardColor,
-                textDirection: widget.textDirection,
-                shadow: widget.shadow ?? defaultShadow,
-                elevation: widget.elevation,
-                scrollPosition: null,
+            if (scrollController != null) {
+              final animatedBuilder = AnimatedBuilder(
+                animation: scrollController,
                 child: wrappedChild,
+                builder: (context, child) {
+                  return PositionedTooltip2(
+                    // curve: _defaultAnimateCurve,
+                    // duration: _defaultAnimateDuration,
+                    animatedTransitionBuilder:
+                        widget.animatedTransitionBuilder,
+                    margin: widget.margin,
+                    targetSize: targetInformation.size,
+                    target: targetInformation.target,
+                    offset: widget.offset,
+                    preferredDirection: widget.preferredDirection,
+                    offsetToTarget: targetInformation.offsetToTarget,
+                    borderRadius: widget.borderRadius,
+                    tailBaseWidth: widget.tailBaseWidth,
+                    tailLength: widget.tailLength,
+                    tailBuilder: widget.tailBuilder,
+                    backgroundColor:
+                        widget.backgroundColor ?? theme.cardColor,
+                    textDirection: widget.textDirection,
+                    shadow: widget.shadow ?? defaultShadow,
+                    elevation: widget.elevation,
+                    scrollPosition: scrollController.position,
+                    child: child!,
+                    preferredDirectionWhenHalfScreen: widget.preferredDirectionWhenHalfScreen,
+                  );
+                },
               );
-            },
-          ),
+              return widget.animatedTransitionBuilder.call(
+                context, 
+                _animationController, 
+                animatedBuilder
+              );
+            }
+
+            final animatedBuilder = PositionedTooltip2(
+              // curve: _defaultAnimateCurve,
+              // duration: _defaultAnimateDuration,
+              animatedTransitionBuilder: widget.animatedTransitionBuilder,
+              margin: widget.margin,
+              targetSize: targetInformation.size,
+              target: targetInformation.target,
+              offset: widget.offset,
+              preferredDirection: widget.preferredDirection,
+              offsetToTarget: targetInformation.offsetToTarget,
+              borderRadius: widget.borderRadius,
+              tailBaseWidth: widget.tailBaseWidth,
+              tailLength: widget.tailLength,
+              tailBuilder: widget.tailBuilder,
+              backgroundColor: widget.backgroundColor ?? theme.cardColor,
+              textDirection: widget.textDirection,
+              shadow: widget.shadow ?? defaultShadow,
+              elevation: widget.elevation,
+              scrollPosition: null,
+              child: wrappedChild,
+              preferredDirectionWhenHalfScreen: widget.preferredDirectionWhenHalfScreen,
+            );
+
+            return widget.animatedTransitionBuilder.call(
+              context, 
+              _animationController, 
+              animatedBuilder
+            );
+          },
         ),
       ),
     );
@@ -772,7 +783,7 @@ abstract class JustTheTooltip2State<T> extends State<JustTheInterface2>
       );
     }
 
-    final targetSize = box.getDryLayout(const BoxConstraints.tightForFinite());
+    final targetSize = box.size;
     final target = box.localToGlobal(box.size.center(Offset.zero));
     // TODO: Instead of this, change the alignment on
     // [CompositedTransformFollower]. That way we can allow a user configurable

@@ -14,7 +14,7 @@ typedef TooltipBuilder = Widget Function(
 );
 
 class InheritedTooltipArea2 extends InheritedWidget {
-  final JustTheTooltipAreaState data;
+  final JustTheTooltipArea2State data;
 
   const InheritedTooltipArea2({
     super.key,
@@ -29,18 +29,18 @@ class InheritedTooltipArea2 extends InheritedWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<JustTheTooltipAreaState>('data', data));
+    properties.add(DiagnosticsProperty<JustTheTooltipArea2State>('data', data));
   }
 }
 
-class JustTheTooltipArea extends StatefulWidget {
+class JustTheTooltipArea2 extends StatefulWidget {
   final TooltipBuilder builder;
 
-  const JustTheTooltipArea({super.key, required this.builder});
+  const JustTheTooltipArea2({super.key, required this.builder});
 
   /// Used to retrieve the scope of the tooltip. This scope is responsible for
   /// managing the children `JustTheTooltip`s
-  static JustTheTooltipAreaState of(BuildContext context) {
+  static JustTheTooltipArea2State of(BuildContext context) {
     final scope =
         context.dependOnInheritedWidgetOfExactType<InheritedTooltipArea2>();
 
@@ -60,7 +60,7 @@ class JustTheTooltipArea extends StatefulWidget {
     return scope!.data;
   }
 
-  static JustTheTooltipAreaState? maybeOf(BuildContext context) {
+  static JustTheTooltipArea2State? maybeOf(BuildContext context) {
     final scope =
         context.dependOnInheritedWidgetOfExactType<InheritedTooltipArea2>();
 
@@ -68,7 +68,7 @@ class JustTheTooltipArea extends StatefulWidget {
   }
 
   @override
-  State<JustTheTooltipArea> createState() => JustTheTooltipAreaState();
+  State<JustTheTooltipArea2> createState() => JustTheTooltipArea2State();
 }
 
 // TODO: Change the logic here eventually to something cleaner.
@@ -78,7 +78,7 @@ class JustTheTooltipArea extends StatefulWidget {
 /// from the child, that would trigger a rebuild of the child... Which, without
 /// fancy logic, would cause this parent to rebuild again. To avoid that, we
 /// instead update the listeners and they then only update their state.
-class JustTheTooltipAreaState extends State<JustTheTooltipArea> {
+class JustTheTooltipArea2State extends State<JustTheTooltipArea2> {
   var entry = ValueNotifier<Widget?>(null);
   var skrim = ValueNotifier<Widget?>(null);
 
@@ -88,13 +88,6 @@ class JustTheTooltipAreaState extends State<JustTheTooltipArea> {
         this.entry.value = entry;
         this.skrim.value = skrim;
       });
-    }
-  }
-
-  void updateEntries({required Widget entry, required Widget skrim}) {
-    if (mounted) {
-      this.entry.value = entry;
-      this.skrim.value = skrim;
     }
   }
 

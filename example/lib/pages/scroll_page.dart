@@ -17,6 +17,7 @@ class ScrollExamplePage extends StatelessWidget {
               tailLength: 10.0,
               isModal: true,
               preferredDirection: AxisDirection.down,
+              preferredDirectionWhenHalfScreen: true,
               child: const Material(
                 color: Colors.blue,
                 shape: CircleBorder(),
