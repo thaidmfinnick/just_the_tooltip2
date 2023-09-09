@@ -3,8 +3,8 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:just_the_tooltip/src/utils/get_axis_direction.dart';
-import 'package:just_the_tooltip/src/utils/get_position_dependent_offset.dart';
+import 'package:just_the_tooltip2/src/utils/get_axis_direction.dart';
+import 'package:just_the_tooltip2/src/utils/get_position_dependent_offset.dart';
 
 typedef TailBuilder = Path Function(
   Offset point1,
@@ -12,8 +12,8 @@ typedef TailBuilder = Path Function(
   Offset point3,
 );
 
-class PositionedTooltip extends SingleChildRenderObjectWidget {
-  const PositionedTooltip({
+class PositionedTooltip2 extends SingleChildRenderObjectWidget {
+  const PositionedTooltip2({
     Key? key,
     required Widget child,
     required this.margin,

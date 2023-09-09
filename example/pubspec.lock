@@ -83,7 +83,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.5"
-  just_the_tooltip:
+  just_the_tooltip2:
     dependency: "direct main"
     description:
       path: ".."

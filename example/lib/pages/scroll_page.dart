@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:just_the_tooltip/just_the_tooltip.dart';
+import 'package:just_the_tooltip2/just_the_tooltip.dart';
 
 class ScrollExamplePage extends StatelessWidget {
   const ScrollExamplePage({Key? key}) : super(key: key);
@@ -13,7 +13,7 @@ class ScrollExamplePage extends StatelessWidget {
       body: ListView(
         children: List.generate(30, (index) {
           if (index == 15) {
-            return JustTheTooltip(
+            return JustTheTooltip2(
               tailLength: 10.0,
               isModal: true,
               preferredDirection: AxisDirection.down,

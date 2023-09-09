@@ -13,17 +13,17 @@ typedef TooltipBuilder = Widget Function(
   Widget scrim,
 );
 
-class InheritedTooltipArea extends InheritedWidget {
+class InheritedTooltipArea2 extends InheritedWidget {
   final JustTheTooltipAreaState data;
 
-  const InheritedTooltipArea({
+  const InheritedTooltipArea2({
     super.key,
     required this.data,
     required super.child,
   });
 
   @override
-  bool updateShouldNotify(covariant InheritedTooltipArea oldWidget) =>
+  bool updateShouldNotify(covariant InheritedTooltipArea2 oldWidget) =>
       data != oldWidget.data;
 
   @override
@@ -42,7 +42,7 @@ class JustTheTooltipArea extends StatefulWidget {
   /// managing the children `JustTheTooltip`s
   static JustTheTooltipAreaState of(BuildContext context) {
     final scope =
-        context.dependOnInheritedWidgetOfExactType<InheritedTooltipArea>();
+        context.dependOnInheritedWidgetOfExactType<InheritedTooltipArea2>();
 
     assert(
       () {
@@ -62,7 +62,7 @@ class JustTheTooltipArea extends StatefulWidget {
 
   static JustTheTooltipAreaState? maybeOf(BuildContext context) {
     final scope =
-        context.dependOnInheritedWidgetOfExactType<InheritedTooltipArea>();
+        context.dependOnInheritedWidgetOfExactType<InheritedTooltipArea2>();
 
     return scope?.data;
   }
@@ -107,7 +107,7 @@ class JustTheTooltipAreaState extends State<JustTheTooltipArea> {
 
   @override
   Widget build(BuildContext context) {
-    return InheritedTooltipArea(
+    return InheritedTooltipArea2(
       data: this,
       // This Builder allows direct children to call `JustTheTooltipArea.of`
       // without requiring a builder themselves.

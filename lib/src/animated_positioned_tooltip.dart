@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:just_the_tooltip/src/positioned_tooltip.dart';
+import 'package:just_the_tooltip2/src/positioned_tooltip.dart';
 
-class AnimatedTooltip extends ImplicitlyAnimatedWidget {
-  const AnimatedTooltip({
+class AnimatedTooltip2 extends ImplicitlyAnimatedWidget {
+  const AnimatedTooltip2({
     super.key,
     required this.child,
     required this.margin,
@@ -107,7 +107,7 @@ class AnimatedTooltip extends ImplicitlyAnimatedWidget {
 }
 
 class _AnimatedTooltipState
-    extends ImplicitlyAnimatedWidgetState<AnimatedTooltip> {
+    extends ImplicitlyAnimatedWidgetState<AnimatedTooltip2> {
   EdgeInsetsGeometryTween? _margin;
   SizeTween? _targetSize;
   Tween<Offset>? _target;
@@ -176,7 +176,7 @@ class _AnimatedTooltipState
   @override
   Widget build(BuildContext context) {
     // FIXME: These non-null casts suck. How do we mark these in linter?
-    return PositionedTooltip(
+    return PositionedTooltip2(
       margin: _margin!.evaluate(animation),
       targetSize: _targetSize!.evaluate(animation)!,
       target: _target!.evaluate(animation),

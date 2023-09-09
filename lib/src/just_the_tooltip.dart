@@ -3,11 +3,10 @@ import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:just_the_tooltip/just_the_tooltip.dart';
-import 'package:just_the_tooltip/src/models/target_information.dart';
-import 'package:just_the_tooltip/src/positioned_tooltip.dart';
-
-part 'just_the_tooltip_entry.dart';
+import 'package:just_the_tooltip2/just_the_tooltip.dart';
+import 'package:just_the_tooltip2/src/models/just_the_interface.dart';
+import 'package:just_the_tooltip2/src/models/target_information.dart';
+import 'package:just_the_tooltip2/src/positioned_tooltip.dart';
 
 typedef ShowTooltip = Future<void> Function({
   bool immediately,
@@ -19,8 +18,8 @@ typedef ShowTooltip = Future<void> Function({
 typedef HideTooltip = Future<void> Function({bool immediately});
 
 /// {@macro just_the_tooltip.overlay.constructor}
-class JustTheTooltip extends StatefulWidget implements JustTheInterface {
-  const JustTheTooltip({
+class JustTheTooltip2 extends StatefulWidget implements JustTheInterface2 {
+  const JustTheTooltip2({
     Key? key,
     required this.content,
     required this.child,
@@ -50,9 +49,9 @@ class JustTheTooltip extends StatefulWidget implements JustTheInterface {
     this.borderRadius = const BorderRadius.all(Radius.circular(6)),
     this.tailLength = 16.0,
     this.tailBaseWidth = 32.0,
-    this.tailBuilder = JustTheInterface.defaultTailBuilder,
+    this.tailBuilder = JustTheInterface2.defaultTailBuilder,
     this.animatedTransitionBuilder =
-        JustTheInterface.defaultAnimatedTransitionBuilder,
+        JustTheInterface2.defaultAnimatedTransitionBuilder,
     this.backgroundColor,
     this.textDirection = TextDirection.ltr,
     this.shadow,
@@ -61,7 +60,7 @@ class JustTheTooltip extends StatefulWidget implements JustTheInterface {
   }) : super(key: key);
 
   @override
-  final JustTheController? controller;
+  final JustTheController2? controller;
 
   @override
   final Widget content;
@@ -159,11 +158,11 @@ class JustTheTooltip extends StatefulWidget implements JustTheInterface {
   final ScrollController? scrollController;
 
   @override
-  JustTheTooltipState<OverlayEntry> createState() =>
+  JustTheTooltip2State<OverlayEntry> createState() =>
       _JustTheTooltipOverlayState();
 }
 
-class _JustTheTooltipOverlayState extends JustTheTooltipState<OverlayEntry> {
+class _JustTheTooltipOverlayState extends JustTheTooltip2State<OverlayEntry> {
   @override
   OverlayEntry? entry;
 
@@ -190,7 +189,7 @@ class _JustTheTooltipOverlayState extends JustTheTooltipState<OverlayEntry> {
   @override
   Widget build(BuildContext context) {
     assert(
-      Overlay.maybeOf(context) != null,
+      Overlay.maybeOf(context, rootOverlay: true) != null,
       '${widget.runtimeType} require an Overlay widget ancestor for correct operation.',
     );
 
@@ -206,7 +205,7 @@ class _JustTheTooltipOverlayState extends JustTheTooltipState<OverlayEntry> {
     );
     final skrimOverlay = OverlayEntry(builder: (context) => _createSkrim());
 
-    final overlay = Overlay.maybeOf(context);
+    final overlay = Overlay.maybeOf(context, rootOverlay: true);
 
     if (overlay == null) {
       throw StateError('Cannot find the overlay for the context $context');
@@ -268,7 +267,7 @@ class _JustTheTooltipOverlayState extends JustTheTooltipState<OverlayEntry> {
 /// for the fact it is setup to handle two Tooltip cases. Abstract methods are
 /// replaced with implementations that are specific to the tooltip type.
 // TODO: This looks more idiomatic as a mixin.
-abstract class JustTheTooltipState<T> extends State<JustTheInterface>
+abstract class JustTheTooltip2State<T> extends State<JustTheInterface2>
     with SingleTickerProviderStateMixin {
   T? get entry;
 
@@ -329,7 +328,7 @@ abstract class JustTheTooltipState<T> extends State<JustTheInterface>
   // These properties are specific to just_the_tooltip
   // static const Curve _defaultAnimateCurve = Curves.linear;
   // static const Duration _defaultAnimateDuration = Duration(milliseconds: 1000);
-  late JustTheController _controller;
+  late JustTheController2 _controller;
   late bool _hasBindingListeners = false;
   final _layerLink = LayerLink();
 
@@ -353,13 +352,13 @@ abstract class JustTheTooltipState<T> extends State<JustTheInterface>
       vsync: this,
     )..addStatusListener(_handleStatusChanged);
 
-    _controller = widget.controller ?? JustTheController();
+    _controller = widget.controller ?? JustTheController2();
     _attachController(_controller);
   }
 
   /// This sucker just gives the controller the newest versions of the
   /// callbacks we have in this state.
-  void _attachController(JustTheController controller) {
+  void _attachController(JustTheController2 controller) {
     controller.attach(
       showTooltip: _showTooltip,
       hideTooltip: _hideTooltip,
@@ -367,7 +366,7 @@ abstract class JustTheTooltipState<T> extends State<JustTheInterface>
   }
 
   @override
-  void didUpdateWidget(covariant JustTheInterface oldWidget) {
+  void didUpdateWidget(covariant JustTheInterface2 oldWidget) {
     final oldController = oldWidget.controller;
     final newController = widget.controller;
 
@@ -708,7 +707,7 @@ abstract class JustTheTooltipState<T> extends State<JustTheInterface>
                   animation: scrollController,
                   child: wrappedChild,
                   builder: (context, child) {
-                    return PositionedTooltip(
+                    return PositionedTooltip2(
                       // curve: _defaultAnimateCurve,
                       // duration: _defaultAnimateDuration,
                       animatedTransitionBuilder:
@@ -735,7 +734,7 @@ abstract class JustTheTooltipState<T> extends State<JustTheInterface>
                 );
               }
 
-              return PositionedTooltip(
+              return PositionedTooltip2(
                 // curve: _defaultAnimateCurve,
                 // duration: _defaultAnimateDuration,
                 animatedTransitionBuilder: widget.animatedTransitionBuilder,
@@ -764,7 +763,7 @@ abstract class JustTheTooltipState<T> extends State<JustTheInterface>
   }
 
   /// This assumes the caller itself is the target
-  TargetInformation _getTargetInformation(BuildContext context) {
+  TargetInformation2 _getTargetInformation(BuildContext context) {
     final box = context.findRenderObject() as RenderBox?;
 
     if (box == null) {
@@ -783,7 +782,7 @@ abstract class JustTheTooltipState<T> extends State<JustTheInterface>
       -target.dy + box.size.height / 2,
     );
 
-    return TargetInformation(
+    return TargetInformation2(
       targetSize,
       target,
       offsetToTarget,

@@ -23,6 +23,12 @@ AxisDirection getAxisDirection({
       final spaceAvailableLeft = leftTargetEdge - margin.left;
       final spaceAvailableRight = size.width - rightTargetEdge - margin.right;
 
+      final targetHeightRadius = targetSize.height / 2;
+      final bottomTargetEdge = target.dy + targetHeightRadius;
+      final spaceAvailableBelow =
+          size.height - bottomTargetEdge - margin.bottom;
+      if (spaceAvailableBelow <= 20) return AxisDirection.up;
+
       // LTE = leftTargetEdge
       // |margin.L          child+offset            LTE                        |
       var fitsLeft = spaceAvailableLeft >= childAndOffsetWidth;

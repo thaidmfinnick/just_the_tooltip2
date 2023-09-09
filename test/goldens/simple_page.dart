@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:just_the_tooltip/src/just_the_tooltip.dart';
+import 'package:just_the_tooltip2/src/just_the_tooltip.dart';
 
 class SimplePage extends StatelessWidget {
   final Widget content;
@@ -26,7 +26,7 @@ class SimplePage extends StatelessWidget {
         body: SizedBox.expand(
           child: Align(
             alignment: alignment,
-            child: JustTheTooltip(
+            child: JustTheTooltip2(
               isModal: isModal,
               fadeInDuration: Duration.zero,
               fadeOutDuration: Duration.zero,

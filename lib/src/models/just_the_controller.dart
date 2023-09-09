@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:just_the_tooltip/just_the_tooltip.dart';
+import 'package:just_the_tooltip2/just_the_tooltip.dart';
 
 enum TooltipStatus { isShowing, isHidden }
 
@@ -7,9 +7,8 @@ enum TooltipStatus { isShowing, isHidden }
 /// It is just a shell class that is given functionality by the
 /// [StatefulWidget]. This idea was copied from a [FocusNode] whose attach
 /// method is called to give the focusNode the context and state of its parent.
-class JustTheController extends ValueNotifier<TooltipStatus> {
-  // TODO: This value is not refelected in the initial state of the tooltip
-  JustTheController({TooltipStatus? value})
+class JustTheController2 extends ValueNotifier<TooltipStatus> {
+  JustTheController2({TooltipStatus? value})
       : super(value ?? TooltipStatus.isHidden) {
     showTooltip = defaultShowTooltip;
     hideTooltip = defaultHideTooltip;
